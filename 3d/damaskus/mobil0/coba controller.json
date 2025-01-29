@@ -1,0 +1,18 @@
+[
+	{
+		"src": 55,
+		"when": 0,
+		"offset": 0,
+		"duration": null,
+		"volume": 1,
+		"loop": false
+	},
+	{
+		"src": 55,
+		"when": 2.1,
+		"offset": 2,
+		"duration": null,
+		"volume": 4,
+		"loop": false
+	}
+]

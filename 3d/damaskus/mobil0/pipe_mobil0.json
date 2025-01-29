@@ -1,0 +1,42 @@
+{
+	"label": "our hardcoded red triangle pipeline",
+	"layout": "auto",
+	"vertex": {
+		"module":26,
+		"buffers":[
+			{
+				"arrayStride": 16,
+				"attributes": [
+					{ "shaderLocation":0, "offset":0, "format":"unorm8x4" },
+					{ "shaderLocation":1, "offset":4, "format":"float32x3" }
+				]
+			}
+		]
+	},
+	"fragment": {
+		"module":26,
+		"targets": [{
+			"blend": {
+				"color": {
+					"srcFactor": "src-alpha",
+					"dstFactor": "one-minus-src-alpha",
+					"operation": "add"
+				},
+				"alpha": {
+					"srcFactor": "one",
+					"dstFactor": "one-minus-src-alpha",
+					"operation": "add"
+				}
+			}
+		}]
+	},
+	"primitive": {
+		"topology": "triangle-list",
+		"cullMode": "back"
+	},
+	"depthStencil": {
+		"depthWriteEnabled": true,
+		"depthCompare": "greater",
+		"format": "depth24plus"
+	}
+}

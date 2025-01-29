@@ -1,0 +1,790 @@
+[
+	[
+		{
+			"text": "'use strict'\n\nimport {\n\tvec3 as v3,\n\tmat4 as m4,\n} from 'https://wgpu-matrix.org/dist/3.x/wgpu-matrix.module.js'\n\n\n\nimport {\n\tlihat as lih,\n\tsleep,\n\ttyarr_b64,\n\tb64_tyarr,\n\tpisahstr,\n\t//getWordByIndex,\n} from './utilku.js'\n\n\n\nimport {\n\trender,\n\tbikinrenderPassDescriptor,\n\tbikindeptex,\n\tbikinDRAWbuf,\n\tbikinbind,\n\tbikinINDbuf,\n\tbikinVERTbuf,\n\tbikinrenpip,\n\tbikinUNISTObuf,\n\tbikinattrinfo,\n\tbikinmodule,\n\tbikinentry,\n\twrite,\n\tpantau_gpudevice,\n\tdv,\n} from './pl.js'\n\n\n\nimport {\n\tcanv3d,\n\tcanv2d,\n\tcx3d,\n\tcx2d,\n\ttambahinfo,\n\t\n\tuibikincl,\n\tuidelcl,\n\t\n\tuiinsbuf,\n\tuiupdbuf,\n\tuidelbuf,\n\t\n\tuiloop,\n} from './ui.js'\n\n\n\nimport {\n\tloadcam,\n\tfview,\n} from './camera.js'\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "122",
+					"g": "122",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let clmap = new Map()\nlet aucx = new AudioContext()\n\n/*========\n//siap reload, karena ada row yg berubah\nlet siap_controller = false\nlet siap_pipe = false\nlet siap_bind = false\nlet siap_pass = false\n--------*/\n\n//mau lihat\nwindow.clmap = clmap\nwindow.aucx = aucx\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "188",
+					"g": "188",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n//cldict & subdict ga aku gabungin, script terlanjur ruwettt\nexport let cldict = {}\nexport let subdict = {} //jumlahnya = cldict\n\nexport let bufdict = {}\n\nlet w = canv3d.width\nlet h = canv3d.height\n\nlet deptex =\nbikindeptex(w,h,)\n\nlet rpd =\nbikinrenderPassDescriptor(\n\t[0.0, 0.1, 0.2, 1,],\n\tdeptex,\n)\n\nloadcam()\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "188",
+					"g": "188",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nlet presentationFormat = navigator.gpu.getPreferredCanvasFormat()\npantau_gpudevice.push(e=>{\n\ttambahinfo(e.error.message,'#ff00ffff','gpudeviceinfo',)\n})\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": false,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nlet clid = 0\nlet _clinfo = class{\n\tconstructor(param_supa){\n\t\tthis.supa = param_supa\n\t\tthis.id = clid++\n\t\t\n\t\t//siap reload, karena ada row yg berubah\n\t\tthis.siap_controller = false\n\t\tthis.siap_pipe = false\n\t\tthis.siap_bind = false\n\t\tthis.siap_pass = false\n\t\t\n\t\tthis.sub = \n\t\tthis\n\t\t.supa\n\t\t.channel('pantau buffer')\n\t\t.on(\n\t\t'postgres_changes',\n\t\t{\n\t\t\tevent:'*',\n\t\t\tschema:'public',\n\t\t\ttable:'buffer_list'\n\t\t},\n\t\tpa=>pantaubuf[pa.eventType](\n\t\t\tthis.id,\n\t\t\tpa.new,\n\t\t\tpa.old,\n\t\t),\n\t\t)\n\t\t\n\t\tthis.sub.subscribe()\n\t}\n\t\n\ttambahrow = async rowpa=>{\n\t\tlet rowinfo = await _rowinfo(this,rowpa,)\n\t\tclmap.get(this)\n\t\t.set(rowpa.id,rowinfo,)\n\t\tuiinsbuf(rowinfo)\n\t}\n\t\n\t//siap reload, karena ada row yg berubah\n\tsetsiap_controller\t= siap_controller\t=>this.siap_controller\t= siap_controller\t\n\tsetsiap_pipe\t= siap_pipe\t=>this.siap_pipe\t= siap_pipe\t\n\tsetsiap_bind\t= siap_bind\t=>this.siap_bind\t= siap_bind\t\n\tsetsiap_pass\t= siap_pass\t=>this.siap_pass\t= siap_pass\t\n\t\n\thapus = ()=>{\n\t\tfor(let [id,rowinfo,] of clmap.get(this)){\n\t\t\trowinfo.hapus()\n\t\t\turutkanpass = true\n\t\t\tuidelbuf(rowinfo)\n\t\t}\n\t\tthis.sub.unsubscribe()\n\t\tuidelcl(this)\n\t\tclmap.delete(this)\n\t}\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nlet _rowinfo = (class{\n\tstatic bikin = async (...param)=>{\n\t\tlet o = new this()\n\t\tawait o.bikinprop(...param)\n\t\treturn o\n\t}\n\tbikinprop = async (clinfo,rowpa,)=>{\n\t\tthis.data =\t\t//ragam\n\t\tthis.aucon = null\t\t//ragam\n\t\tthis.clinfo = clinfo\t\t//ajeg\n\t\tthis.fsfh = null\n\t\tthis.isrealtime = false\n\t\tthis.lastmod = 0\n\t\tthis.uikey = ''//siap upload dari ui\n\t\t\n\t\tawait this.readrowpa(rowpa)\n\t}\n\t\n\treadrowpa = async rowpa=>{\n\t\tthis.buffer\t= rowpa.buffer\n\t\tthis.created_at\t= rowpa.created_at\n\t\tthis.descr\t= rowpa.descr\n\t\tthis.id\t= rowpa.id\n\t\tthis.usage\t= rowpa.usage\n\t\t\n\t\tawait this.bikindata(rowpa)\n\t}\n\tbikindata = async rowpa=>{\n\t\tawait usfubuf[rowpa.usage][1](this,rowpa,).catch(e=>tambahinfo(\n`Error: adaerror\n\t\n${e.stack ?? e.message}\n\t\n\tdi client id ${this.clinfo.id}\n\tdi id ${this.id}\n`\t\t,'orange',))\n\t}\n\tsetdata = async (data,audata,)=>{\n\t\tthis.aucon?.destroy()\n\t\tthis.data?.destroy?.()\n\t\tthis.aucon = null\n\t\tthis.data = data\n\t\t\n\t\t//reload next reader\n\t\tlet cl = this.clinfo\n\t\tswitch(this.usage){\n\t\t\tcase 'bufvert'\t:\n\t\t\tcase 'bufind'\t:\n\t\t\tcase 'bufdraw'\t:\n\t\t\tcase 'bind'\t:\n\t\t\t\tcl.setsiap_pass(true) ;break\n\t\t\tcase 'sound'\t:\n\t\t\t\tcl.setsiap_controller(true) ;break\n\t\t\tcase 'wgsl'\t:\n\t\t\t\tcl.setsiap_pipe(true) ;break\n\t\t\tcase 'bufsto'\t:\n\t\t\tcase 'bufuni'\t:\n\t\t\tcase 'pipe'\t:\n\t\t\tcase 'controller'\t:\n\t\t\t\tcl.setsiap_bind(true) ;break\n\t\t\t//pass dah pol\n\t\t}\n\t\t\n\t\tif(this.usage !== 'controller'){ return }\n\t\tthis.aucon = new aucon(audata)\n\t}\n\tsetfsfh = fsfh=>this.fsfh = fsfh\n\tsetrealtime = check=>this.isrealtime = check\n\tsetlastmod = lastmod=>this.lastmod = lastmod\n\tsetuikey = uikey=>this.uikey = uikey\n\t\n\t//time\n\tsettime = async (time0,time1,timejarak,isplaying,)=>{\n\t\tif(this.usage !== 'controller'){ return lih('Error: usage harus berupa controller')}\n\t\twrite(this.data,new Float32Array([\n\t\t\ttime0,\n\t\t\ttime1,\n\t\t\ttimejarak,\n\t\t\tisplaying,\n\t\t]),)\n\t}\n\t\n\thapus = async ()=>{\n\t\tthis.aucon?.destroy()\n\t\tthis.data?.destroy?.()\n\t\tclmap.get(this.clinfo).delete(this.id)\n\t}\n}).bikin\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "122",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "let aucon = class {\n\tconstructor(audioData) {\n\t\tlet curtime = aucx.currentTime\n\t\tthis.audioContext = aucx;\n\t\tthis.audioData = audioData;\n\t\tthis.sources = [];\n\t\tthis.gainNodes = [];\n\t\tthis.isPlaying = false;\n\t\tthis.speed = 1;\n\t\tthis.startTime = curtime;// global\n\t\tthis.curtime = 0;// global, ga realtime\n\t\tthis.lastseek = 0;// local\n\t\tthis.stopTime = curtime;// global\n\t}\n\n\tcreateSource(audioBuffer, volume, loop,newspeed,) {\n\t\tconst source = this.audioContext.createBufferSource();\n\t\tsource.buffer = audioBuffer;\n\t\tsource.playbackRate.value = newspeed;\n\t\tsource.loop = loop;\n\n\t\tconst gainNode = this.audioContext.createGain();\n\t\tgainNode.gain.value = volume;\n\n\t\tsource.connect(gainNode).connect(this.audioContext.destination);\n\n\t\treturn { source, gainNode };\n\t}\n\n\tstart_at(seek,newspeed,) {\n\t\tif (this.isPlaying) return;\n\t\tthis.isPlaying = true;\n\t\t\n\t\tlet curtime = this.audioContext.currentTime\n\t\t\n\t\tlet newstartTime = curtime\n\t\t\n\t\tthis.audioData.forEach(({ src, when, offset, duration, volume, loop, }) => {\n\t\t\tconst { source, gainNode } = this.createSource(src, volume, loop,newspeed,);\n\t\t\t\n\t\t\tlet whenglo\t= newstartTime + (when - seek)/newspeed\t;\t;whenglo = Math.max(0,whenglo,)\n\t\t\tlet offsetlok\t= Math.max(offset,offset + seek - when,)\t;\t;offsetlok = Math.max(0,offsetlok,)\n\t\t\tif(duration === null){\n\t\t\t\tsource.start(whenglo,offsetlok,)\n\t\t\t}else{\n\t\t\t\tlet durglo = Math.min(duration,duration + when - seek,) ;durglo = Math.max(0,durglo,)\n\t\t\t\tsource.start(whenglo,offsetlok,durglo,)\n\t\t\t}\n\t\t\tthis.sources.push(source);\n\t\t\tthis.gainNodes.push(gainNode);\n\t\t\t\n\t\t});\n\t\t//akhir\n\t\tthis.speed = newspeed\n\t\tthis.startTime = curtime\n\t\tthis.lastseek = seek\n\n\t}\n\t\n\tgetCurTime() {//realtime\n\t\tlet curtime = this.audioContext.currentTime\n\t\treturn this.isPlaying\n\t\t? (\n\t\t\t(this.isPlaying ? curtime : this.stopTime)\n\t\t\t- this.startTime\n\t\t)*this.speed + this.lastseek\n\t\t: this.curtime\n\t}\n\n\tdestroy() {\n\t\tif (!this.isPlaying) return\n\t\tthis.curtime = this.getCurTime()\n\t\tthis.isPlaying = false;\n\t\tthis.stopTime = this.audioContext.currentTime\n\t\tthis.sources.forEach((source) => {\n\t\t\tsource.stop();\n\t\t\tsource.disconnect();\n\t\t});\n\t\tthis.gainNodes.forEach((gainNode) => gainNode.disconnect());\n\t\tthis.sources = [];\n\t\tthis.gainNodes = [];\n\t}\n\t\n\t//lainlain\n\tplay(){\n\t\t//\"this.curtime\" beda dengan \"curtime\"\n\t\tthis.start_at(this.curtime,this.speed,)\n\t}\n\tpause(){\n\t\tthis.destroy()\n\t}\n\tsetCurTime(time){\n\t\tif(this.isPlaying){\n\t\t\tthis.destroy()\n\t\t\tthis.start_at(time,this.speed,)\n\t\t}else{\n\t\t\tthis.curtime = time\n\t\t}\n\t}\n\tsetspeed(speed){\n\t\tif(this.isPlaying){\n\t\t\tthis.destroy()\n\t\t\tthis.start_at(this.curtime,speed,)\n\t\t}else{\n\t\t\tthis.speed = speed\n\t\t}\n\t}\n};\n\naddEventListener('mousedown',e=>aucx.resume(),)\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "55",
+					"b": "55",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let main = async()=>{ try{\n\tlih('teess, ini main js')\n\t\n\trequestAnimationFrame(loop)\n/*========\n\tlet cl = window.cl = await bikinclinfo(\n\t\t'https://hmbtdoeieiezztgpexpw.supabase.co',\n\t\t'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtYnRkb2VpZWllenp0Z3BleHB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE2Nzg0NjUsImV4cCI6MjA0NzI1NDQ2NX0.q1lwtj-oqhSXBPdvYRNpOxGQ4HJ-VX6g_jJws4eX_0A',\n\t)\n\n\tlet cl = window.cl = await bikinclinfo(\n\t\t'https://gwpezptjslssarivlqro.supabase.co',\n\t\t'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cGV6cHRqc2xzc2FyaXZscXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI0OTc4NzYsImV4cCI6MjA0ODA3Mzg3Nn0.MddHNM2aeBTNdys19AW544maLh-7ipzsQz8Yzl7h6AA',\n\t)\n--------*/\n\n\t\n}catch(err){\n\tlih(err)\n} }\n",
+			"visible": true,
+			"time": "1567425.9110226424",
+			"speed": "1",
+			"running": true,
+			"color": [
+				{
+					"r": "255",
+					"g": "99",
+					"b": "99",
+					"frame": "0"
+				},
+				{
+					"r": "255",
+					"g": "99",
+					"b": "99",
+					"frame": "3"
+				},
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "3.1"
+				}
+			]
+		},
+		{
+			"text": "\nlet tunggu_rpd = null //renderpassdict promise object\nlet loop = async t=>{\n\tuiloop(t).catch(lih)\n\tawait tunggu_rpd\n\ttunggu_rpd = renderpassdict()\n\trequestAnimationFrame(loop)\n}\n\nlet misc = new ArrayBuffer((\n\t+16 //camera view\n\t+4 //time now & 3 pad\n)*4)\nlet view = new Float32Array(misc,( 0 )*4,16,)\nlet now = new Uint32Array(misc,( 0+16 )*4,4,)\nfview(camera_view=>{\n\tm4.copy(camera_view,view,)\n})\nlet miscbuf = bikinUNISTObuf(\n\tmisc,true,\n)\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "188",
+					"b": "122",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let bikinclinfo = async (supabaseUrl, supabaseKey,)=>{\n\t//bikin client\n\tlet clini = new _clinfo(\n\t\tsupabase.createClient(supabaseUrl, supabaseKey,)\n\t)\n\tlih(clini)\n\t\n\t//payload\n\tlet clpa = await clini\n\t\t.supa\n\t\t.from('buffer_list')\n\t\t.select('*')\n\n\tlih(clpa)\n\tif(clpa.error){ throw JSON.stringify(clpa.error,null,'\\t',) }\n\tclmap.set(clini,new Map(),)\n\tfor(let rowpa of usagesort(clpa.data)){\n\t\tawait clini.tambahrow(rowpa)\n\t}\n\t\n\tuibikincl(clini)\n}\n//mau lihat\nwindow.bikinclinfo = bikinclinfo\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "255",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let hapusclinfo = clid=>{\n\turutkanpass = true\n\tlet f = f_cl_cari\n\tclid = String(clid)\n\t\n//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\tsubdict[clid].buf.unsubscribe()\n\tdelete subdict[clid]\n\t\n//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\tf(bufdict,clid,k=>{\n\t\tbufdict[k].data?.destroy?.()\n\t\tfor(let [kini,target,] of targetmap){\n\t\t\ttarget.delete(k) //hapus targetmap k dari target\n\t\t}\n\t\ttargetmap.delete(k)\n\t\tdelete bufdict[k]\n\t\tuidelbuf(k)\n\t})\n\t\n//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\tdelete cldict[clid]\n\t\n\tuicl(cldict)\n\tlih(`cl ${clid} deletedddd`)\n}\n\n\n\nlet f_cl_cari = (dict,str,f,)=>{\n\tfor (let key of Object.keys(dict)) {\n\t\tif (key.startsWith(str+' ')) {\n\t\t\tf(key)\n\t\t}\n\t}\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "155",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nconst precedenceOrder = [\n\t\"bufvert\",\n\t\"bufind\",\n\t\"bufdraw\",\n\t\"bufsto\",\n\t\"bufuni\",\n\t\"sound\",\n\t\"controller\",\n\t\"wgsl\",\n\t\"pipe\",\n\t\"bind\",\n\t\"pass\",\n]\nlet usagesort = items=>{\n    // Create a precedence map: Constructor → Index\n    const precedenceMap = new Map(precedenceOrder.map((type, index) => [type, index]));\n\n    // Sort items based on the precedence of the `stuff` constructor\n    return items.sort((a, b) => {\n        const aPrecedence = precedenceMap.get(a.usage) ?? Infinity;\n        const bPrecedence = precedenceMap.get(b.usage) ?? Infinity;\n        return aPrecedence - bPrecedence;\n    });\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "155",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let bikinbuf = async (\n\tclid,\n\tkey,\n\tdata,\n\tusage,\n\tdescr,\n)=>{\n\tlet cl = null\n\tfor(let [k,v,] of clmap){\n\t\tif(k.id === clid){\n\t\t\tcl = k\n\t\t\tbreak\n\t\t}\n\t}\n\t\n\tif(!cl){return tambahinfo(\n\t\t`client id: ${clid} tidak ditemukan.`,\n\t\t'orange',\n\t)}\n\t\n\tlet data1 = await usfubuf[usage][0](data)//.catch(lih)\n\tlih(data1)\n\treturn await cl.supa.rpc('insbuf',{\n\t\tbuffer_param:data1,\n\t\tusage_param:usage,\n\t\tkey_param:key,\n\t\tdescr_param:descr,\n\t},)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "155",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let updbuf = async (\n\trowinfo,\n\tkey,\n\tdata,\n\tusage,\n\tdescr,\n)=>{\n\t//jika data === null, kolom buffer supabase ga berubah\n\tlet data1 = \n\t(data === null) ? null :\n\tawait usfubuf[usage][0](data)\n\t\n\treturn await rowinfo.clinfo.supa.rpc('updbuf',{\n\t\tid_param:rowinfo.id,\n\t\tkey_param:key,\n\t\tbuffer_param:data1,\n\t\tusage_param:usage,\n\t\tdescr_param:descr,\n\t},)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "188",
+					"g": "188",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let hapusbuf = async (\n\trowinfo,\n\tkey,\n)=>{\n\treturn await rowinfo.clinfo.supa.rpc('delbuf',{\n\t\tid_param:rowinfo.id,\n\t\tkey_param:key,\n\t})\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "222",
+					"g": "222",
+					"b": "222",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nlet usfubuf = { //usage_function buffer\n\t//[upload,download,fungsibuf,]\n\t\n\t//tyarr <<-- -->> b64\n\tbufvert\t:[null,null,arr=>bikinVERTbuf(arr),],\n\tbufind\t:[null,null,arr=>bikinINDbuf(arr),],\n\tbufdraw\t:[null,null,arr=>bikinDRAWbuf(arr),],\n\tbufsto\t:[null,null,arr=>bikinUNISTObuf(arr,false,),],\n\tbufuni\t:[null,null,arr=>bikinUNISTObuf(arr,true,),],\n\tsound\t:[null,null,],\n\tcontroller\t:[null,null,],\n\t\n\t//string\n\twgsl\t:[null,null,],\n\t\n\t//json\n\tpipe\t:[null,null,],\n\tbind\t:[null,null,],\n\tpass\t:[null,null,],\n}\nlet pantaubuf = {}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "188",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf.bufvert[0] =\nusfubuf.bufind[0] =\nusfubuf.bufdraw[0] =\nusfubuf.bufsto[0] =\nusfubuf.bufuni[0] =\nasync file=>{\n\tlet arr = await file.arrayBuffer()\n\treturn await tyarr_b64(arr)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf.wgsl[0] =\nasync file=>await file.text()\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "222",
+					"g": "255",
+					"b": "222",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf.sound[0] =\nusfubuf.controller[0] =\nusfubuf.bind[0] =\nusfubuf.pipe[0] =\nusfubuf.pass[0] =\nasync file=>JSON.parse(await file.text())\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "188",
+					"g": "255",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": false,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf.bufvert[1] =\nusfubuf.bufind[1] =\nusfubuf.bufdraw[1] =\nusfubuf.bufsto[1] =\nusfubuf.bufuni[1] =\n\nasync (rowinfo,rowpabaru,)=>{\n\tlet arr = await b64_tyarr(rowpabaru.buffer) //mungkin error: atob\n\t\n\t//data: kalo cuma ubah value, pake write\n\tif(\n\t\trowinfo.data\n\t\t&& (rowinfo.usage === rowpabaru.usage)\n\t\t&& (rowinfo.data.size === arr.byteLength)\n\t){\n\t\twrite(rowinfo.data,arr,)\n\t}else{\n\t\trowinfo.setdata(usfubuf[rowpabaru.usage][2](arr))\n\t}\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "155",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf\n.sound[1] =\nasync (rowinfo,rowpabaru,)=>{\n\tlet desc = structuredClone(rowpabaru.buffer)\n\tlet rowmap = clmap.get(rowinfo.clinfo)\n\t\n\tconst response = await fetch(desc);\n\tconst arrayBuffer = await response.arrayBuffer();\n\tlet aubuf = await aucx.decodeAudioData(arrayBuffer);\n\trowinfo.setdata(aubuf)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf\n.controller[1] =\nasync (rowinfo,rowpabaru,)=>{\n\tlet desc = structuredClone(rowpabaru.buffer)\n\tlet rowmap = clmap.get(rowinfo.clinfo)\n\t\n\tlet arr = new Float32Array(4)\n\t// time0, time1, timejarak, isplaying\n\tif(\n\t\trowinfo.data\n\t\t&& (rowinfo.usage === rowpabaru.usage)\n\t\t&& (rowinfo.data.size === arr.byteLength)\n\t){\n\t\twrite(rowinfo.data,arr,)\n\t}else{\n\t\tfor(let i = 0;i < desc.length;i++){\n\t\t\tdesc[i].src = rowmap.get(desc[i].src).data\n\t\t}\n\t\trowinfo.setdata(\n\t\t\tbikinUNISTObuf(arr,true,),\n\t\t\tdesc,\n\t\t)\n\t}\n\trowinfo.aucon.start_at(0,1,)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "155",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf\n.wgsl[1] =\nasync (rowinfo,rowpabaru,)=>{\n\tlet mod = await bikinmodule(rowpabaru.buffer)\n\trowinfo.setdata(mod)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "0",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf\n.pipe[1] =\nasync (rowinfo,rowpabaru,)=>{\n\tlet desc = structuredClone(rowpabaru.buffer)\n\tlet rowmap = clmap.get(rowinfo.clinfo)\n\t\n\tdesc.vertex.module = rowmap\n\t.get(desc.vertex.module)\n\t.data\n\t\n\tdesc.fragment.module = rowmap\n\t.get(desc.fragment.module)\n\t.data\n\t\n\tfor(let target of desc.fragment.targets){\n\t\ttarget.format = presentationFormat\n\t}\n\t\n\tlet out = dv.createRenderPipeline(desc)\n\trowinfo.setdata(out)\n\t\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "188",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf\n.bind[1] =\nasync (rowinfo,rowpabaru,)=>{\n\tlet desc = structuredClone(rowpabaru.buffer)\n\tlet rowmap = clmap.get(rowinfo.clinfo)\n\t\n\tdesc.layout = rowmap\n\t.get(desc.layout.pipe)\n\t.data\n\t?.getBindGroupLayout(desc.layout.layout)\n\t\n\tfor(let bindbuf of desc.entries){\n\t\t\n\t\t\n\t\tif(bindbuf.resource.buffer === 'misc'){\n\t\t\tbindbuf.resource.buffer = miscbuf\n\t\t\tcontinue\n\t\t}\n\t\tbindbuf.resource.buffer = rowmap\n\t\t.get(bindbuf.resource.buffer)\n\t\t.data\n\t\t\n\t\t\n\t}\n\t\n\tlet out = dv.createBindGroup(desc)\n\trowinfo.setdata(out)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "155",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf\n.pass[1] =\nasync (rowinfo,rowpabaru,)=>{\n\tlet desc = structuredClone(rowpabaru.buffer)\n\tlet rowmap = clmap.get(rowinfo.clinfo)\n\t\n\tfor(let pass of desc.pass){\n\t\tpass.pipe = rowmap.get(pass.pipe)\n\t\tfor(let i in pass.bind){\n\t\t\tpass.bind[i] = rowmap.get(pass.bind[i])\n\t\t}\n\t\tfor(let i in pass.vert){\n\t\t\tpass.vert[i] = rowmap.get(pass.vert[i])\n\t\t}\n\t\tpass.ind = rowmap.get(pass.ind)\n\t\tpass.draw = rowmap.get(pass.draw)\n\t}\n\t\n\trowinfo.setdata(desc)\n\turutkanpass = true\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "122",
+					"b": "122",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\npantaubuf.INSERT = async (clid,rowpa,)=>{\n\tlet cl = null\n\tfor(let [k,v,] of clmap){\n\t\tif(k.id === clid){\n\t\t\tcl = k\n\t\t\tbreak\n\t\t}\n\t}\n\tawait cl.tambahrow(rowpa)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "188",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\npantaubuf.UPDATE = async (clid,row,rowold,)=>{\t\n\tlet rowinfo = null\n\tfor(let [k,v,] of clmap){\n\t\tif(k.id === clid){\n\t\t\trowinfo = v.get(row.id)\n\t\t\tbreak\n\t\t}\n\t}\n\tawait rowinfo.readrowpa(row).catch(e=>{\n\t\tupdinfo(e,rowinfo,)\n\t})\n\n\tuiupdbuf(rowinfo)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "222",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nlet updinfo = async (a,rowinfo,)=>{\n\ttambahinfo(\n`Error: adaerror\n\n${a}\n\n\tdi client id ${rowinfo.clinfo.id}\n\tdi id ${rowinfo.id}\n`\t\t\t,\n\t\t\t'orange',\n\t)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\npantaubuf.DELETE = async (clid,row,rowold,)=>{\t\n\tlet rowinfo = null\n\tfor(let [k,v,] of clmap){\n\t\tif(k.id === clid){\n\t\t\trowinfo = v.get(rowold.id)\n\t\t\tbreak\n\t\t}\n\t}\n\tawait rowinfo.hapus()\n\turutkanpass = true\n\tuidelbuf(rowinfo)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "\nlet urutkanpass = false\nlet caritargetkosong = false\nlet passurut = []\nlet renderpassdict = async ()=>{\n\tnow[0] = Math.round(performance.now())\n\twrite(miscbuf,misc,)\n\t\n\t//nanti cek update\n\t//\n\tif(urutkanpass){\n\t\turutkanpass = false\n\t\tpassurut = []\n\t\tfor (const rowmap of clmap.values()) {\n\t\t\tfor (const rowinfo of rowmap.values()) {\n\t\t\t\t;(rowinfo.usage === 'pass')\n\t\t\t\t? passurut.push(rowinfo) : 0\n\t\t\t}\n\t\t}\n\t\tpassurut\n\t\t.sort((a,b,)=>a.data.order-b.data.order)\n\t}\n\t\n\tfor(let [clinfo,rowmap,] of clmap){\n\t\tfor(let [id,rowinfo,] of rowmap){\n\t\t\tif(rowinfo.fsfh && rowinfo.isrealtime){\n\t\t\t\trowfile(rowinfo)\n\t\t\t}\n\t\t}\n\t\t\n\t\t\n\t\t\n\t\t//siap_controller\n\t\tfor(let [id,rowinfo,] of rowmap){\n\t\t\t;clinfo.siap_controller\n\t\t\t&& (rowinfo.usage === 'controller')\n\t\t\t&& await rowinfo.bikindata(rowinfo)\n\t\t}\n\t\tclinfo.setsiap_controller(false)\n\t\t//siap_pipe\n\t\tfor(let [id,rowinfo,] of rowmap){\n\t\t\t;clinfo.siap_pipe\n\t\t\t&& (rowinfo.usage === 'pipe')\n\t\t\t&& await rowinfo.bikindata(rowinfo)\n\t\t}\n\t\tclinfo.setsiap_pipe(false)\n\t\t//siap_bind\n\t\tfor(let [id,rowinfo,] of rowmap){\n\t\t\t;clinfo.siap_bind\n\t\t\t&& (rowinfo.usage === 'bind')\n\t\t\t&& await rowinfo.bikindata(rowinfo)\n\t\t}\n\t\tclinfo.setsiap_bind(false)\n\t\t//siap_pass\n\t\tfor(let [id,rowinfo,] of rowmap){\n\t\t\t;clinfo.siap_pass\n\t\t\t&& (rowinfo.usage === 'pass')\n\t\t\t&& await rowinfo.bikindata(rowinfo)\n\t\t}\n\t\tclinfo.setsiap_pass(false)\n\t}\n\t\n/*========\n\t//siap\n\tsiap_controller\t\t&& await siap('controller'\t)\n\tsiap_pipe\t\t&& await siap('pipe'\t)\n\tsiap_bind\t\t&& await siap('bind'\t)\n\tsiap_pass\t\t&& await siap('pass'\t)\n\t\n\tsiap_controller\t=\n\tsiap_pipe\t=\n\tsiap_bind\t=\n\tsiap_pass\t= false\n--------*/\n\t\n\t//render\n\tlet err = await render(passurut,passgetdata,)\n\terr && tambahinfo(\n`Error: render error\n\n${err}\n`\t,'#ff9977ff','rendererror',)\n}\n",
+			"visible": true,
+			"time": "443040.68939797586",
+			"speed": "0.3243243243243231",
+			"running": true,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				},
+				{
+					"r": "88",
+					"g": "88",
+					"b": "88",
+					"frame": "1"
+				},
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "2"
+				}
+			]
+		},
+		{
+			"text": "\nexport let rowfile = async rowinfo=>{\n\tlet file = await rowinfo.fsfh.getFile()\n\tif(rowinfo.lastmod !== file.lastModified){\n\t\trowinfo.setlastmod(file.lastModified)\n\t\tupdbuf(\n\t\t\trowinfo,\n\t\t\trowinfo.uikey,\n\t\t\tfile,\n\t\t\trowinfo.usage,\n\t\t\trowinfo.descr,\n\t\t)\n\t}\n}\n\n\n\n\n\n\n//-=-=-=-=-=-=-=\n/*========\nlet siap = async usage=>{\n\tfor(let [clinfo,rowmap,] of clmap){\n\tfor(let [id,rowinfo,] of rowmap){\n\t\t;(rowinfo.usage === usage)\n\t\t&& await rowinfo.bikindata(rowinfo)\n\t}\n\t}\n}\n--------*/\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "155",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nlet passgetdata = rowinfo=>rowinfo.data\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "window.cldict = cldict\nwindow.subdict = subdict\n\nwindow.bufdict = bufdict\n\n//window.bikinclinfo = bikinclinfo\n//window.hapusclinfo = hapusclinfo\n\nwindow.bikinbuf = bikinbuf\nwindow.updbuf = updbuf\nwindow.hapusbuf = hapusbuf\n\nwindow.passurut = passurut\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "155",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "\n/*\n-=-===-=-=-==--=-=-=--==--==--=\n\n\n\n\n\n\n\n\n\n\n\n-=-===-=-=-==--=-=-=--==--==--=\n*/\n",
+			"visible": true,
+			"time": "1567474.7892226938",
+			"speed": "1",
+			"running": true,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				},
+				{
+					"r": "255",
+					"g": "0",
+					"b": "255",
+					"frame": ".1"
+				},
+				{
+					"r": "0",
+					"g": "255",
+					"b": "255",
+					"frame": ".2"
+				}
+			]
+		}
+	]
+]

@@ -1,0 +1,8 @@
+{
+	"label": "bind group for objects",
+	"layout": { "pipe":22, "layout":0 },
+	"entries": [
+		{ "binding":0, "resource":{ "buffer":"misc" } },
+		{ "binding":1, "resource":{ "buffer":18 } }
+	]
+}

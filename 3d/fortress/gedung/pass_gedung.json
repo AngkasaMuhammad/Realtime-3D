@@ -1,0 +1,40 @@
+{
+	"label": "our basic canvas renderPass",
+	"colorAttachments": [
+		{
+			"clearValue": [
+				0,
+				0,
+				0.2,
+				1
+			],
+			"loadOp": "clear",
+			"storeOp": "store"
+		}
+	],
+	"depthStencilAttachment": {
+		"depthClearValue": 0,
+		"depthLoadOp": "clear",
+		"depthStoreOp": "store"
+	},
+	"pass": [
+		{
+			"pipe": 71,
+			"bind": [
+				72
+			],
+			"vert": [
+				67
+			],
+			"ind": 68,
+			"blend_tutupduluu": [
+				0.5,
+				0.5,
+				0.7,
+				0.99
+			],
+			"draw": 69
+		}
+	],
+	"order": 7
+}

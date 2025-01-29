@@ -1,0 +1,192 @@
+[
+	[
+		{
+			"text": "\n-- Create the reference_table\nCREATE TABLE adminkey (\n    id SERIAL PRIMARY KEY,\n    key TEXT NOT NULL UNIQUE\n);\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "155",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nALTER TABLE adminkey ENABLE ROW LEVEL SECURITY;\n\nCREATE POLICY hanya_rpc\nON adminkey -- [][][][][][][][][][][][][][][][][][][][][][]\nFOR ALL\nUSING (\n    auth.role() = 'service_role'\n);",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "155",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "\n-- ======================================================\n--\n--\n--\n--\n--\n--\n--\n--\n--\n-- ======================================================\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "\n-- Step 1: Create the target_table\nCREATE TABLE buffer_list ( -- [][][][][][][][][][][][][][][][][][][][][][]\n    id SERIAL PRIMARY KEY,\n    usage TEXT NOT NULL,\n    buffer TEXT NOT NULL,\n    source TEXT NOT NULL\n);\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "188",
+					"g": "188",
+					"b": "122",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n-- Step 2: Enable RLS on target_table\nALTER TABLE buffer_list ENABLE ROW LEVEL SECURITY;\n\n-- Step 3: Create an RLS policy to restrict direct access\nCREATE POLICY hanya_rpc\nON buffer_list -- [][][][][][][][][][][][][][][][][][][][][][]\nFOR ALL\nUSING (\n    auth.role() = 'service_role' -- Allow only RPC (service role) access\n);\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "0",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "\n-- Step 4: Create the RPC function\n-- insert row\nCREATE OR REPLACE FUNCTION insbuf( -- [][][][][][][][][][][][][][][][][][][][][][]\n    name_to_check TEXT,\n    new_data JSONB\n)\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "155",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nRETURNS TEXT AS $$\nBEGIN\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "55",
+					"g": "55",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n    -- Check if the name exists in the reference_table\n    IF EXISTS (\n        SELECT 1\n        FROM adminkey\n        WHERE key = name_to_check\n    )\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "122",
+					"b": "122",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n\tTHEN\n        INSERT INTO buffer_list (usage, buffer, source) -- [][][][][][][][][][][][][][][][][][][][][][]\n        VALUES (\n            new_data->>'usage',\n            new_data->>'buffer',\n            new_data->>'source'\n        );\n        RETURN 'OK, inserted';\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n    ELSE\n        -- Return error message\n        RETURN 'error: admin key salah.';\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n    END IF;\nEND;\n$$ LANGUAGE plpgsql SECURITY DEFINER;\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "0",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "\n-- ======================================================\n-- sampe sini, bikin updbuf, delbuf\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	]
+]

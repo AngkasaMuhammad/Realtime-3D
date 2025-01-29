@@ -1,0 +1,33 @@
+{
+	"src":{
+		"city0":{
+			"info":"City Street Sounds - Auckland, New Zealand by tdes -- https://freesound.org/s/276922/ -- License: Attribution 3.0",
+			"sound":"https://cdn.freesound.org/previews/276/276922_1176609-lq.mp3"
+		},
+		"city1":{
+			"info":"City noise.wav by crazyadamos -- https://freesound.org/s/402706/ -- License: Creative Commons 0",
+			"sound":"https://cdn.freesound.org/previews/402/402706_7791093-lq.mp3"
+		},
+		"aku": {
+			"info": "suaraku",
+			"sound": "https://angkasamuhammad.github.io/Matrix-Percepatan-Gaya-Gesek/BengkelGear/CaraMatrix0/sound/mulai.m4a"
+		}
+	},
+	"track":[
+		{
+			"src":"city0",
+			"start":0,
+			"volume":100,
+		},
+		{
+			"src":"city0",
+			"start":5555,
+			"volume":100,
+		},
+		{
+			"src":"aku",
+			"start":2222,
+			"volume":100,
+		}
+	]
+}

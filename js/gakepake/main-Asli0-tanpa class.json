@@ -1,0 +1,773 @@
+[
+	[
+		{
+			"text": "'use strict'\n\nimport {\n\tvec3 as v3,\n\tmat4 as m4,\n} from 'https://wgpu-matrix.org/dist/3.x/wgpu-matrix.module.js'\n\n\n\nimport {\n\tlihat as lih,\n\tsleep,\n\ttyarr_b64,\n\tb64_tyarr,\n\tpisahstr,\n\t//getWordByIndex,\n} from './utilku.js'\n\n\n\nimport {\n\trender,\n\tbikinrenderPassDescriptor,\n\tbikindeptex,\n\tbikinDRAWbuf,\n\tbikinbind,\n\tbikinINDbuf,\n\tbikinVERTbuf,\n\tbikinrenpip,\n\tbikinUNISTObuf,\n\tbikinattrinfo,\n\tbikinmodule,\n\tbikinentry,\n\twrite,\n\tpantau_gpudevice,\n\tdv,\n} from './pl.js'\n\n\n\nimport {\n\tcanv3d,\n\tcanv2d,\n\tcx3d,\n\tcx2d,\n\ttambahinfo,\n\t\n\tuicl,\n\t\n\tuiinsbuf,\n\tuiupdbuf,\n\tuidelbuf,\n} from './ui.js'\n\n\n\nimport {\n\tloadcam,\n\tfview,\n} from './camera.js'\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "122",
+					"g": "122",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n//cldict & subdict ga aku gabungin, script terlanjur ruwettt\nexport let cldict = {}\nexport let subdict = {} //jumlahnya = cldict\n\nexport let bufdict = {}\nlet targetmap = new Map()\nlet siapupd = new Set()\nlet siapupdsorted = new Map()\n;{\n\tlet se\n\tlet su = siapupdsorted\n\t\nse = new Set()\n\tsu.set('bufvert',se,)\n\tsu.set('bufind',se,)\n\tsu.set('bufdraw',se,)\n\tsu.set('bufsto',se,)\n\tsu.set('bufuni',se,)\n\tsu.set('wgsl',se,)\nse = new Set()\n\tsu.set('pipe',se,)\nse = new Set()\n\tsu.set('bind',se,)\nse = new Set()\n\tsu.set('pass',se,)\n}\n\nlet w = canv3d.width\nlet h = canv3d.height\n\nlet deptex =\nbikindeptex(w,h,)\n\nlet rpd =\nbikinrenderPassDescriptor(\n\t[0.0, 0.1, 0.2, 1,],\n\tdeptex,\n)\n\nloadcam()\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "188",
+					"g": "188",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nlet presentationFormat = navigator.gpu.getPreferredCanvasFormat()\npantau_gpudevice.push(e=>{\n\ttambahinfo(e.error.message,'#ff00ffff','gpudeviceinfo',)\n})\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let main = async()=>{ try{\n\tlih('teess, ini main js')\n\t\n\trequestAnimationFrame(loop)\n/*========\n\tlet cl = window.cl = await bikinclinfo(\n\t\t'https://hmbtdoeieiezztgpexpw.supabase.co',\n\t\t'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtYnRkb2VpZWllenp0Z3BleHB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE2Nzg0NjUsImV4cCI6MjA0NzI1NDQ2NX0.q1lwtj-oqhSXBPdvYRNpOxGQ4HJ-VX6g_jJws4eX_0A',\n\t)\n\n\tlet cl = window.cl = await bikinclinfo(\n\t\t'https://gwpezptjslssarivlqro.supabase.co',\n\t\t'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cGV6cHRqc2xzc2FyaXZscXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI0OTc4NzYsImV4cCI6MjA0ODA3Mzg3Nn0.MddHNM2aeBTNdys19AW544maLh-7ipzsQz8Yzl7h6AA',\n\t)\n--------*/\n\n\t\n}catch(err){\n\tlih(err)\n} }\n",
+			"visible": true,
+			"time": "1103363.2593852235",
+			"speed": "1",
+			"running": true,
+			"color": [
+				{
+					"r": "255",
+					"g": "99",
+					"b": "99",
+					"frame": "0"
+				},
+				{
+					"r": "255",
+					"g": "99",
+					"b": "99",
+					"frame": "3"
+				},
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "3.1"
+				}
+			]
+		},
+		{
+			"text": "\nlet loop = async t=>{\n\tawait renderpassdict()\n\trequestAnimationFrame(loop)\n}\n\nlet misc = new ArrayBuffer((\n\t+16 //camera view\n\t+4 //time now & 3 pad\n)*4)\nlet view = new Float32Array(misc,( 0 )*4,16,)\nlet now = new Uint32Array(misc,( 0+16 )*4,4,)\nfview(camera_view=>{\n\tm4.copy(camera_view,view,)\n})\nlet miscbuf = bikinUNISTObuf(\n\tmisc,true,\n)\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "188",
+					"b": "122",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n\nlet clid = 0\nexport let bikinclinfo = async (supabaseUrl, supabaseKey,)=>{\n\t//bikin client\n\tlet clini = supabase.createClient(supabaseUrl, supabaseKey,)\n\tlih(clini)\n\t\n\tlet payload = await clini\n\t\t.from('buffer_list')\n\t\t.select('*')\n\tlih(payload)\n\tif(payload.error){\n\t\tlet i = payload.error.details\n\t\ttambahinfo(i,'#ff0000ff',) \n\t\tthrow i\n\t}\n\tcldict[clid] = clini\n\tsubdict[clid] = {\n\t\tbuf:null,\n\t}\n\tpantaubufarr(clid)\n\tlet sorted = usagesort(payload.data)\n\tfor(let i = 0;i < sorted.length;i++){\n\t\tlet rowini = sorted[i]\n\t\tawait pantaubuf\n\t\t.INSERT(clid,rowini,)\n\t}\n\turutkanpass = true\n\t\n\tuicl(cldict)\n\t\n\treturn clid++\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "255",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let hapusclinfo = clid=>{\n\turutkanpass = true\n\tlet f = f_cl_cari\n\tclid = String(clid)\n\t\n//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\tsubdict[clid].buf.unsubscribe()\n\tdelete subdict[clid]\n\t\n//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\tf(bufdict,clid,k=>{\n\t\tbufdict[k].data?.destroy?.()\n\t\tfor(let [kini,target,] of targetmap){\n\t\t\ttarget.delete(k) //hapus targetmap k dari target\n\t\t}\n\t\ttargetmap.delete(k)\n\t\tdelete bufdict[k]\n\t\tuidelbuf(k)\n\t})\n\t\n//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\tdelete cldict[clid]\n\t\n\tuicl(cldict)\n\tlih(`cl ${clid} deletedddd`)\n}\n\n\n\nlet f_cl_cari = (dict,str,f,)=>{\n\tfor (let key of Object.keys(dict)) {\n\t\tif (key.startsWith(str+' ')) {\n\t\t\tf(key)\n\t\t}\n\t}\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "155",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nconst precedenceOrder = [\n\t\"bufvert\",\n\t\"bufind\",\n\t\"bufdraw\",\n\t\"bufsto\",\n\t\"bufuni\",\n\t\"wgsl\",\n\t\"pipe\",\n\t\"bind\",\n\t\"pass\",\n]\nlet usagesort = items=>{\n    // Create a precedence map: Constructor → Index\n    const precedenceMap = new Map(precedenceOrder.map((type, index) => [type, index]));\n\n    // Sort items based on the precedence of the `stuff` constructor\n    return items.sort((a, b) => {\n        const aPrecedence = precedenceMap.get(a.usage) ?? Infinity;\n        const bPrecedence = precedenceMap.get(b.usage) ?? Infinity;\n        return aPrecedence - bPrecedence;\n    });\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "155",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let bikinbuf = async (\n\tclid,\n\tkey,\n\tdata,\n\tusage,\n\tdescr,\n)=>{\n\tlet cl = cldict[clid]\n\tif(!cl){return tambahinfo(\n\t\t`client id: ${clid} tidak ditemukan.`,\n\t\t'orange',\n\t)}\n\t\n\tlet data1 = await usfubuf[usage][0](data).catch(lih)\n\tlih(data1)\n\treturn await cl.rpc('insbuf',{\n\t\tbuffer_param:data1,\n\t\tusage_param:usage,\n\t\tkey_param:key,\n\t\tdescr_param:descr,\n\t},)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "155",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let updbuf = async (\n\tclid,\n\tid,\n\tkey,\n\tdata,\n\tusage,\n\tdescr,\n)=>{\n\tlet buf = bufdict[`${clid} ${id}`]\n\tlet data1 =\n\tdata\n\t? await usfubuf[usage][0](data).catch(lih)\n\t: buf.buffer\n\t//lih(data1)\n\treturn await cldict[clid].rpc('updbuf',{\n\t\tid_param:id,\n\t\tkey_param:key,\n\t\tbuffer_param:data1,\n\t\tusage_param:usage,\n\t\tdescr_param:descr,\n\t},)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "188",
+					"g": "188",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nexport let hapusbuf = async (\n\tclid,\n\tid,\n\tkey,\n)=>{\n\treturn await cldict[clid].rpc('delbuf',{\n\t\tid_param:id,\n\t\tkey_param:key,\n\t})\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "222",
+					"g": "222",
+					"b": "222",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nlet pantaubufarr = clid=>\n\tsubdict[clid].buf = cldict[clid]\n\t.channel('pantau buffer')\n\t.on(\n\t'postgres_changes',\n\t{\n\t\tevent:'*',\n\t\tschema:'public',\n\t\ttable:'buffer_list'\n\t},\n\tpa=>pantaubuf[pa.eventType](\n\t\tclid,\n\t\tpa.new,\n\t\tpa.old,\n\t),\n\t).subscribe()\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "122",
+					"g": "188",
+					"b": "222",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nlet usfubuf = { //usage_function buffer\n\t//[upload,download,fungsibuf,]\n\t\n\t//tyarr <<-- -->> b64\n\tbufvert\t:[null,null,arr=>bikinVERTbuf(arr),],\n\tbufind\t:[null,null,arr=>bikinINDbuf(arr),],\n\tbufdraw\t:[null,null,arr=>bikinDRAWbuf(arr),],\n\tbufsto\t:[null,null,arr=>bikinUNISTObuf(arr,false,),],\n\tbufuni\t:[null,null,arr=>bikinUNISTObuf(arr,true,),],\n\t\n\t//string\n\twgsl\t:[null,null,],\n\t\n\t//json\n\tpipe\t:[null,null,],\n\tbind\t:[null,null,],\n\tpass\t:[null,null,],\n}\nlet pantaubuf = {}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "188",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf.bufvert[0] =\nusfubuf.bufind[0] =\nusfubuf.bufdraw[0] =\nusfubuf.bufsto[0] =\nusfubuf.bufuni[0] =\nasync file=>{\n\tlet arr = await file.arrayBuffer()\n\treturn await tyarr_b64(arr)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf.wgsl[0] =\nasync file=>await file.text()\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "222",
+					"g": "255",
+					"b": "222",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf.bind[0] =\nusfubuf.pipe[0] =\nusfubuf.pass[0] =\nasync file=>JSON.parse(await file.text())\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "188",
+					"g": "255",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": false,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf.bufvert[1] =\nusfubuf.bufind[1] =\nusfubuf.bufdraw[1] =\nusfubuf.bufsto[1] =\nusfubuf.bufuni[1] =\n\nasync (clid,rowini,)=>{\n\t//pass\n\tlet krow = `${clid} ${rowini.id}`\n\t\n\tlet buf = bufdict[krow]\n\tlet arr = await b64_tyarr(rowini.buffer).catch(a=>a)\n\tif(arr.constructor !== ArrayBuffer){\n\t\ttasetsiap(krow)\n\t\tthrow buf.data = arr\n\t}\n\t//data: kalo cuma ubah value, pake write\n\tif(\n\t\trowini.data\n\t\t&& (rowini.usage === buf.usage)\n\t\t&& (arr.byteLength === buf.data.size)\n\t){\n\t\twrite(buf.data,arr,)\n\t}else{\n\t\tbuf.data = usfubuf[rowini.usage][2](arr)\n\t\ttasetsiap(krow)\n\t\turutkanpass = true\n\t}\n\treturn buf.data\n}\n\n\nlet bbp = kbindpass=>\n\t(\n\t\t(bufdict[kbindpass].usage === 'bufsto')\n\t\t|| (bufdict[kbindpass].usage === 'bufuni')\n\t)\n\t?2:3 //bind, pass,\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "155",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf\n.wgsl[1] =\nasync (clid,rowini,)=>{\n\t//pipe\n\tlet krow = `${clid} ${rowini.id}`\n\t\n\tlet buf = bufdict[krow]\n\ttasetsiap(krow)\n\turutkanpass = true\n\treturn buf.data = await\n\tbikinmodule(rowini.buffer)\n\t//sampe sini, aku ubah usage, wgsl --> lain --> wgsl, blum work\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "0",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf\n.pipe[1] =\nasync (clid,rowini,)=>{\n\t//bind&pass\n\tlet krow = `${clid} ${rowini.id}`\n\t\n\tlet buf = bufdict[krow]\n\tlet desc = structuredClone(rowini.buffer)\n\tlet k\n\t\n\tlet err = null\n\ttasetsiap(krow)\n\turutkanpass = true\n\tbuf.data = null\n//vertex\n\tk = `${clid} ${desc.vertex.module}`\n\tif(bufdict[k].data?.constructor !== GPUShaderModule){ err = bufdict[k].data }\n\tdesc.vertex.module = bufdict[k].data\n\terr || sambungtare(k,krow,)\n//fragment\n\tk = `${clid} ${desc.fragment.module}`\n\tif(bufdict[k].data?.constructor !== GPUShaderModule){ err = bufdict[k].data }\n\tdesc.fragment.module = bufdict[k].data\n\terr || sambungtare(k,krow,)\n\t\n\tfor(let target of desc.fragment.targets){\n\t\ttarget.format = presentationFormat\n\t}\n\t\n\tif(err){ throw buf.data = err }\n\treturn buf.data = dv.createRenderPipeline(desc)\n\t\n}\n\n\n\nlet pbp = kbindpass=>\n\t(bufdict[kbindpass].usage === 'bind')\n\t?2:3 //bind, pass,\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "188",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf\n.bind[1] =\nasync (clid,rowini,)=>{\n\t//pass\n\tlet krow = `${clid} ${rowini.id}`\n\t\n\tlet desc = structuredClone(rowini.buffer)\n\tlet k\n\t\n\tlet err = null\n\tlet buf = bufdict[krow]\n\ttasetsiap(krow)\n\turutkanpass = true\n\tbuf.data = null\n\tk = `${clid} ${desc.layout.pipe}`\n\tif(bufdict[k].data.constructor !== GPURenderPipeline){ err = bufdict[k].data }\n\tdesc.layout =\n\tbufdict[k].data\n\t?.getBindGroupLayout(desc.layout.layout)\n\terr || sambungtare(k,krow,)\n\t\n\tfor(let bindbuf of desc.entries){\n\t\tif(bindbuf.resource.buffer === -1){\n\t\t\tbindbuf.resource.buffer = miscbuf\n\t\t\tcontinue\n\t\t}\n\t\tk = `${clid} ${bindbuf.resource.buffer}`\n\t\tif(bufdict[k].data.constructor !== GPUBuffer){ err = bufdict[k].data }\n\t\tbindbuf.resource.buffer = bufdict[k].data\n\t\terr || sambungtare(k,krow,)\n\t}\n\t\n\tif(err){ throw buf.data = err }\n\treturn buf.data = dv.createBindGroup(desc)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "155",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nusfubuf\n.pass[1] =\nasync (clid,rowini,)=>{\n\tlet krow = `${clid} ${rowini.id}`\n\t\n\tlet desc = structuredClone(rowini.buffer)\n\tlet k\n\tlet err = null\n\tlet buf = bufdict[krow]\n\ttasetsiap(krow)\n\turutkanpass = true\n\tbuf.data = null\n\ttry{\n\tfor(let pass of desc.pass){\n\t\tk = `${clid} ${pass.pipe}`;\t\tif(bufdict[k].data.constructor !== GPURenderPipeline){ err = bufdict[k].data };\t\tpass.pipe = bufdict[k].data;\t\terr || sambungtare(k,krow,)\n\t\tfor(let i in pass.bind){\n\t\t\tk = `${clid} ${pass.bind[i]}`;\t\tif(bufdict[k].data.constructor !== GPUBindGroup){ err = bufdict[k].data };\t\tpass.bind[i] = bufdict[k].data;\t\terr || sambungtare(k,krow,)\n\t\t}\n\t\tfor(let i in pass.vert){\n\t\t\tk = `${clid} ${pass.vert[i]}`;\t\tif(bufdict[k].data.constructor !== GPUBuffer){ err = bufdict[k].data };\t\tpass.vert[i] = bufdict[k].data;\t\terr || sambungtare(k,krow,)\n\t\t}\n\t\tk = `${clid} ${pass.ind}`;\t\tif(bufdict[k].data.constructor !== GPUBuffer){ err = bufdict[k].data };\t\tpass.ind = bufdict[k].data;\t\terr || sambungtare(k,krow,)\n\t\tk = `${clid} ${pass.draw}`;\t\tif(bufdict[k].data.constructor !== GPUBuffer){ err = bufdict[k].data };\t\tpass.draw = bufdict[k].data;\t\terr || sambungtare(k,krow,)\n\t}\n\t}catch(e){ err = e.stack }\n\t\n\tif(err){ throw buf.data = err }\n\treturn buf.data = desc\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "122",
+					"b": "122",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\npantaubuf.INSERT = async ( clid, rowini,rowold,)=>{\n\tlet id = rowini.id\n\tlet k = `${clid} ${id}`\n\tbufdict[k] = {\n\t\t...rowini,\n\t\tkey:'',\n\t\tfsfh:null, //file system file handler\n\t\trealtime:false,\n\t}\n\t\n\tlet data = //variable ini hanya untuk info\n\tawait usfubuf\n\t[rowini.usage]\n\t?.[1]\n\t?.(clid,rowini,)\n\t?.catch(a=>{\n\t\ttambahinfo(\n`Error: adaerror\n\n${a.stack}\n\n\tdi client id ${clid}\n\tdi id ${id}\n`\t\t\t,\n\t\t\t'orange',\n\t\t)\n\t\treturn a\n\t})\n\t\n\t\n\t;data ?? tambahinfo(\n`Error: usage ${rowini.usage} tidak valid\n\tdi client id ${clid}\n\tdi id ${id}\n`\t\t,\n\t\t'orange',\n\t)\n\t\n\ttasetsiap(k)\n\tuiinsbuf(clid,id,)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "188",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n//sambung target ke reader\nlet sambungtare = (ta,re,)=>{\n\tlet tam = targetmap\n\ttam.has(ta)\n\t|| tam.set(ta,new Set(),)\n\ttam.get(ta).add(re)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n//putus target dari reader\nlet putustare = (ta,re,)=>{\n\tlet tam = targetmap\n\ttam.get(ta)?.delete(re)\n\tcaritargetkosong = true\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "188",
+					"g": "188",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n//hapus semua reader\nlet habisre = re=>{\n\tlet tam = targetmap\n\tfor(let [ta,taset,] of tam){\n\t\ttaset.delete(re)\n\t}\n\tcaritargetkosong = true\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "155",
+					"g": "255",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n//masukkan reader ke siapupd\nlet tasetsiap = ta=>{\n\tfor(let re of targetmap.get(ta) ?? []){\n\t\tsiapupd.add(re)\n\t}\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "188",
+					"g": "188",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\npantaubuf.UPDATE = async (clid,row,rowold,)=>{\n\t//lih('ada update')\n\t//lih(row)\n\tlet id = row.id\n\tlet k = `${clid} ${id}`\n\tlet buf = bufdict[k]\n\thabisre(k)\n\t\n\tbuf.buffer = row.buffer\n\tbuf.descr = row.descr\n\t\n\tawait usfubuf\n\t[row.usage]\n\t?.[1]\n\t?.(clid,row,)\n\t?.catch(e=>{\n\t\tupdinfo(e,clid,id,)\n\t\t\n\t})\n\n\tbuf.usage = row.usage\n\tuiupdbuf(k)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "222",
+					"b": "188",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nlet updinfo = async (a,clid,id,)=>{\n\ttambahinfo(\n`Error: adaerror\n\n${a}\n\n\tdi client id ${clid}\n\tdi id ${id}\n`\t\t\t,\n\t\t\t'orange',\n\t)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\npantaubuf.DELETE = async (clid,pa,rowold,)=>{\n\tlet id = rowold.id\n\tlet k = `${clid} ${id}`\n\tlih('delete')\n\thabisre(k)\n\tbufdict[k].data.destroy?.()\n\ttargetmap.delete(k)\n\tfor(let [kini,target,] of targetmap){\n\t\ttarget.delete(k) //hapus targetmap k dari target\n\t}\n\tdelete bufdict[k]\n\tuidelbuf(k)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "155",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "\nlet urutkanpass = false\nlet caritargetkosong = false\nlet passurut = []\nlet renderpassdict = async ()=>{\n\tnow[0] = Math.round(performance.now())\n\twrite(miscbuf,misc,)\n\t\n\t//nanti cek update\n\t//\n\tif(urutkanpass){\n\t\turutkanpass = false\n\t\tpassurut = Object\n\t\t.values(bufdict)\n\t\t.filter(a=>a.usage === 'pass')\n\t\t.sort((a,b,)=>a.data.order-b.data.order)\n\t}\n\t\n\t//siapupd\n\tfor(let k of siapupd){\n\t\tsiapupdsorted.get(\n\t\t\tbufdict[k].usage\n\t\t).add(k)\n\t}\n\tsiapupd.clear()\n\t\n\t//siapupdsorted\n\tfor(let [usage,s,] of siapupdsorted){\n\t\tfor(let k of s){\n\t\t\tlet buf = bufdict[k]\n\t\t\tlet clid = +k.split(' ')[0]\n\t\t\tusfubuf\n\t\t\t[buf.usage]\n\t\t\t?.[1]\n\t\t\t?.(clid,buf,)\n\t\t\t?.catch(lih)\n\t\t}\n\t\ts.clear()\n\t}\n\t\n\t//target kosong\n\tif(caritargetkosong){\n\tfor(let [ta,taset,] of targetmap){\n\t\ttaset.size || targetmap.delete(ta)\n\t\tcaritargetkosong = false\n\t}\n\t}\n\t\n\tfor(let k in bufdict){\n\t\tlet buf = bufdict[k]\n\t\t\n\t\tif(buf.fsfh && buf.realtime){\n\t\t\tbuffile(k)\n\t\t}\n\t\t\n\t\tf_source[buf.source]?.(k)\n\t}\n\t\n\t//render\n\tlet err = await render(passurut)\n\terr && tambahinfo(\n`Error: render error\n\n${err}\n`\t,'#ff9977ff','rendererror',)\n}\n",
+			"visible": true,
+			"time": "292533.8834308135",
+			"speed": "0.3243243243243231",
+			"running": true,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				},
+				{
+					"r": "88",
+					"g": "88",
+					"b": "88",
+					"frame": "1"
+				},
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "2"
+				}
+			]
+		},
+		{
+			"text": "\nexport let buffile = async k=>{\n\tlet buf = bufdict[k]\n\tlet file = await buf.fsfh.getFile()\n\tif(buf.lastmod !== file.lastModified){\n\t\tbuf.lastmod = file.lastModified\n\t\tlet [clid,id,] = k.split(' ')\n\t\tupdbuf(\n\t\t\tclid,\n\t\t\tid,\n\t\t\tbuf.key,\n\t\t\tfile,\n\t\t\tbuf.usage,\n\t\t\tbuf.descr,\n\t\t)\n\t}\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "155",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\nlet f_source = {}\n\n//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\nf_source.camera = key=>{\n\tlet buf = bufdict[key]\n\twrite(buf.buffer,view,)\n}\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "window.cldict = cldict\nwindow.subdict = subdict\n\nwindow.bufdict = bufdict\n\n//window.bikinclinfo = bikinclinfo\n//window.hapusclinfo = hapusclinfo\n\nwindow.bikinbuf = bikinbuf\nwindow.updbuf = updbuf\nwindow.hapusbuf = hapusbuf\nwindow.siapupd = siapupd\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "0",
+					"g": "155",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				}
+			]
+		},
+		{
+			"text": "\n//nanti\n//await render(rpd,[],passarr,)\n",
+			"visible": true,
+			"time": "0",
+			"speed": "1",
+			"running": false,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "0",
+					"frame": "0"
+				}
+			]
+		}
+	],
+	[
+		{
+			"text": "\n/*\n-=-===-=-=-==--=-=-=--==--==--=\n\n\n\n\n\n\n\n\n\n\n\n-=-===-=-=-==--=-=-=--==--==--=\n*/\n",
+			"visible": true,
+			"time": "1103412.1375852749",
+			"speed": "1",
+			"running": true,
+			"color": [
+				{
+					"r": "255",
+					"g": "255",
+					"b": "255",
+					"frame": "0"
+				},
+				{
+					"r": "255",
+					"g": "0",
+					"b": "255",
+					"frame": ".1"
+				},
+				{
+					"r": "0",
+					"g": "255",
+					"b": "255",
+					"frame": ".2"
+				}
+			]
+		}
+	]
+]
