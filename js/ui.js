@@ -103,7 +103,7 @@ export let uibikincl = clinfo=>{
 		tr.appendChild(td)
 	tbody.appendChild(tr)
 }
-let hapuscl = e=>{//sampe sini, hapus clinfo
+let hapuscl = e=>{
 	if(e.detail%2){return}
 	let cur = e.currentTarget
 	cur.onmouseleave(e)
@@ -145,7 +145,13 @@ export let uidelcl = clinfo=>{
 //buf
 let fileawal = new File(['"kosong"'],'ini_file_awal',)
 que('#newbuf')[0].addEventListener('click',e=>{
-	
+	if(que('#bufkey')[0].value.length <= 0){
+		let i =
+`Error: Key harus diisi
+`
+		tambahinfo(lih(i),'orange',)
+		return
+	}
 	bikinbuf(
 		+que('#bufclid')[0].value,
 		que('#bufkey')[0].value,
@@ -195,6 +201,7 @@ export let uiinsbuf = rowinfo=>{
 				button.addEventListener('click',bukafilebuf,)
 				attr(button,'mousedescr','Upload data',)
 			td.appendChild(button)
+			//sampe sini, svg donwolad
 		tr.appendChild(td)
 		td = document.createElement('td')
 			td.classList.add('rowusage')
@@ -558,16 +565,21 @@ let f_tombolutama = e=>{
 	e.currentTarget.removeEventListener('click',f_tombolutama,)
 	e.currentTarget.remove()
 	f_tombolutama = null
+	e.currentTarget.onmouseleave(e)
+	tambahinfo(`
+	Loading...
+	
+`,'white',)
 }
 que('[tombol="mulaiutama"]')[0].addEventListener('click',f_tombolutama,)
-lih(que('#play')[0]).addEventListener('click',e=>{		que(`[rowinfoid="77"] .play`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
-lih(que('#pause')[0]).addEventListener('click',e=>{		que(`[rowinfoid="77"] .pause`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
-lih(que('#seek')[0]).addEventListener('mousedown',e=>{		que(`[rowinfoid="77"] .seek`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
-lih(que('#seek')[0]).addEventListener('mousemove',e=>{		que(`[rowinfoid="77"] .seek`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
-lih(que('#seek')[0]).addEventListener('mouseup',e=>{		que(`[rowinfoid="77"] .seek`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
-lih(que('#speed')[0]).addEventListener('mousedown',e=>{		que(`[rowinfoid="77"] svg.speed`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
-lih(que('#speed')[0]).addEventListener('mousemove',e=>{		que(`[rowinfoid="77"] svg.speed`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
-lih(que('#speed')[0]).addEventListener('mouseup',e=>{		que(`[rowinfoid="77"] svg.speed`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+que('#play')[0].addEventListener('click',e=>{		que(`[rowinfoid="77"] .play`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+que('#pause')[0].addEventListener('click',e=>{		que(`[rowinfoid="77"] .pause`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+que('#seek')[0].addEventListener('mousedown',e=>{		que(`[rowinfoid="77"] .seek`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+que('#seek')[0].addEventListener('mousemove',e=>{		que(`[rowinfoid="77"] .seek`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+que('#seek')[0].addEventListener('mouseup',e=>{		que(`[rowinfoid="77"] .seek`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+que('#speed')[0].addEventListener('mousedown',e=>{		que(`[rowinfoid="77"] svg.speed`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+que('#speed')[0].addEventListener('mousemove',e=>{		que(`[rowinfoid="77"] svg.speed`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+que('#speed')[0].addEventListener('mouseup',e=>{		que(`[rowinfoid="77"] svg.speed`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
 setInterval(()=>{
 	que('#showseek')[0].textContent = que(`[rowinfoid="77"] .curtime`)[0]?.textContent ?? '----'
 	que('#showspeed')[0].textContent = (+que(`[rowinfoid="77"] input.speed`)[0]?.value)?.toFixed(3) ?? '----'
@@ -638,18 +650,17 @@ addEventListener('load',()=>tambahinfo(
 
 --------------------------
 "Fortress vs tank sirewel armor kalengkaleng rengginang"
+Cerita pendek tentang tank diguling pake ranjau, sampe jadi bebek guling
+Tidak ada objek pesawat.
 
 Saat ini aku mau tunjukkan:
-- Perubahan bentuk objek secara realtime
-	Aku edit dari Blender,
-	objek 3d dikirim ke Supabase,
-	supabase mengirim update info ke semua viewer,
-	objek 3d tampil
+- Play Pause Seek Speed
+	Diharapkan suara & animasi bisa synchronized.
+	
+Mau lihatlihat data lewat console log,
+Silakan tulis "clmap" setelah click "Mulai"
 
-Untuk memulai:
-1. Click Show/Hide data (icon mata)
-2. Click "Tambah client"
-3. Gerakkan kamera, lihat table petunjuk
+Halaman data khusus admin "Show/Hide data"
 
 Maturnuwun
 
