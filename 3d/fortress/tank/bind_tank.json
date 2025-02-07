@@ -1,0 +1,11 @@
+{
+	"entries": [
+		{ "binding": 0, "resource": {"buffer": "misc"}},
+		{ "binding": 1, "resource": {"buffer": 77}}
+	],
+	"label": "iinnniii bind tank",
+	"layout": {
+		"layout": 0,
+		"pipe": 91
+	}
+}

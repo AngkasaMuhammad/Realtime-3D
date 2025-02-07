@@ -6,5 +6,46 @@
 		"src": 75,
 		"volume": 1,
 		"when": 0
+	},
+	
+	
+	
+	{
+		"duration": null,
+		"loop": true,
+		"offset": 33,
+		"src": 76,
+		"volume": 4,
+		"when": 0
+	},
+	{
+		"duration": null,
+		"loop": true,
+		"offset": 0,
+		"src": 76,
+		"volume": 3,
+		"when": 0
+	},
+	
+	
+	
+	{
+		"duration": null,
+		"loop": true,
+		"offset": 0,
+		"src": 78,
+		"volume": 3,
+		"when": 0
+	},
+	
+	
+	
+	{
+		"duration": null,
+		"loop": false,
+		"offset": 0,
+		"src": 79,
+		"volume": 3,
+		"when": 11
 	}
 ]

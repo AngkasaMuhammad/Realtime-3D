@@ -5,17 +5,11 @@
 			"resource": {
 				"buffer": "misc"
 			}
-		},
-		{
-			"binding": 1,
-			"resource": {
-				"buffer": 77
-			}
 		}
 	],
 	"label": "bind group for objects",
 	"layout": {
 		"layout": 0,
-		"pipe": 71
+		"pipe": 84
 	}
 }

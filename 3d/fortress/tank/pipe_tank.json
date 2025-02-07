@@ -5,7 +5,7 @@
 		"format": "depth24plus"
 	},
 	"fragment": {
-		"module": 70,
+		"module": 90,
 		"targets": [
 			{
 				"blend": {
@@ -23,30 +23,23 @@
 			}
 		]
 	},
-	"label": "our hardcoded red triangle pipeline",
+	"label": "inii pipa tank",
 	"layout": "auto",
 	"primitive": {
 		"cullMode": "back",
 		"topology": "triangle-list"
 	},
 	"vertex": {
+		"module": 90,
 		"buffers": [
 			{
-				"arrayStride": 16,
-				"attributes": [
-					{
-						"format": "unorm8x4",
-						"offset": 0,
-						"shaderLocation": 0
-					},
-					{
-						"format": "float32x3",
-						"offset": 4,
-						"shaderLocation": 1
-					}
+				"arrayStride": 28,
+				"attributes":[
+					{ "format":"float32",	"offset":0, "shaderLocation":0 },
+					{ "format":"float32x3",	"offset":4, "shaderLocation":1 },
+					{ "format":"float32x3",	"offset":16, "shaderLocation":2 }
 				]
 			}
-		],
-		"module": 70
+		]
 	}
 }
