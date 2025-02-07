@@ -73,9 +73,13 @@ table input[type="password"]{
 	padding:2px;
 }
 
-.seek{
+#seek,
+.seek,
+svg#speed,
+svg.speed{
 	cursor:w-resize;
 }
+
 .speed{
 	text-align:center;
 }
@@ -84,7 +88,7 @@ table input[type="password"]{
 	white-space: pre;
 }
 #hlmdata table{
-	background:#00000055;
+	background:#000000aa;
 	margin-bottom:55px;
 }
 #infolist > *{
@@ -111,4 +115,11 @@ table input[type="password"]{
 */
 .mati{
 	background:#990000ff !important;
+}
+
+
+@keyframes kelapkelip {
+	from {color: white;}
+	to {color: grey;}
+	to {color: blue;}
 }

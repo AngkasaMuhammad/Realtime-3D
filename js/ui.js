@@ -52,8 +52,14 @@ let fSH = e=>{
 	let s = 'hidechild'
 	c.contains(s)?c.remove(s):c.add(s)
 }
+let fSHdata = e=>{
+	fSH(e)
+	for(let ta of Array.from(que('textarea'))){
+		tares({currentTarget:ta})
+	}
+}
 que('#SHhelp')[0].addEventListener('click',fSH,)
-que('#SHdata')[0].addEventListener('click',fSH,)
+que('#SHdata')[0].addEventListener('click',fSHdata,)
 que('#SHinfo')[0].addEventListener('click',fSH,)
 
 let supaurl = que('#supaurl')[0]
@@ -248,6 +254,12 @@ let bikincontroller = td=>{
 		svgseek.addEventListener('mouseup',seekup,)
 		svgseek.classList.add('seek')
 	td.appendChild(svgseek)
+	let svgspeed = svg('#speed',null,)
+		svgspeed.addEventListener('mousedown',speeddown,)
+		svgspeed.addEventListener('mousemove',speedmove,)
+		svgspeed.addEventListener('mouseup',speedup,)
+		svgspeed.classList.add('speed')
+	td.appendChild(svgspeed)
 	let span = document.createElement('span')
 		span.textContent = '00000'
 		span.classList.add('curtime')
@@ -273,6 +285,11 @@ let hapuscontroller = td=>{
 		svgseek.removeEventListener('mousemove',seekmove,)
 		svgseek.removeEventListener('mouseup',seekup,)
 	svgseek.remove()
+	let svgspeed = td.querySelector('.speed')
+		svgspeed.removeEventListener('mousedown',speeddown,)
+		svgspeed.removeEventListener('mousemove',speedmove,)
+		svgspeed.removeEventListener('mouseup',speedup,)
+	svgspeed.remove()
 	let span = td.querySelector('.curtime')
 	span.remove()
 	let inp = td.querySelector('.speed')
@@ -406,7 +423,7 @@ let play = e=>{
 	aucon.play()
 }
 let pause = e=>ctrgetaucon(e).aucon.pause()
-let seekdown = e=>e.currentTarget.requestPointerLock()
+let seekdown = e=>e.currentTarget.requestPointerLock({unadjustedMovement: true,})
 let seekmove = e=>{
 	if(document.pointerLockElement !== e.currentTarget){ return }
 	let aucon = ctrgetaucon(e).aucon
@@ -417,6 +434,22 @@ let speed = e=>{
 	let aucon = ctrgetaucon(e).aucon
 	aucon.setspeed(+e.currentTarget.value)
 }
+let speeddown = e=>e.currentTarget.requestPointerLock({unadjustedMovement: true,})
+let speedmove = e=>{
+	let cur = e.currentTarget
+	if(document.pointerLockElement !== cur){ return }
+	let aucon = ctrgetaucon(e).aucon
+	//aucon.setspeed(.7)
+	let inpspeed = cur.parentElement.querySelector('input.speed')
+	let v = +inpspeed.value
+	let fac = 1.08
+	v = Math.log(v)/Math.log(fac)
+		v += +e.movementX/44
+	v = fac**v
+	inpspeed.value = v
+	inpspeed.dispatchEvent(new Event('change'))
+}
+let speedup = e=>document.exitPointerLock()
 let tulisdescr = async e=>{
 			let inp = e.currentTarget
 			let tr = inp
@@ -520,6 +553,26 @@ export let aksesditolak = rowinfo=>tambahinfo(
 
 =-=-=-=-=-=-=-=-*/
 //lain - lain
+let f_tombolutama = e=>{
+	que('#newcl')[0].dispatchEvent(new MouseEvent('click'))
+	e.currentTarget.removeEventListener('click',f_tombolutama,)
+	e.currentTarget.remove()
+	f_tombolutama = null
+}
+que('[tombol="mulaiutama"]')[0].addEventListener('click',f_tombolutama,)
+lih(que('#play')[0]).addEventListener('click',e=>{		que(`[rowinfoid="77"] .play`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+lih(que('#pause')[0]).addEventListener('click',e=>{		que(`[rowinfoid="77"] .pause`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+lih(que('#seek')[0]).addEventListener('mousedown',e=>{		que(`[rowinfoid="77"] .seek`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+lih(que('#seek')[0]).addEventListener('mousemove',e=>{		que(`[rowinfoid="77"] .seek`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+lih(que('#seek')[0]).addEventListener('mouseup',e=>{		que(`[rowinfoid="77"] .seek`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+lih(que('#speed')[0]).addEventListener('mousedown',e=>{		que(`[rowinfoid="77"] svg.speed`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+lih(que('#speed')[0]).addEventListener('mousemove',e=>{		que(`[rowinfoid="77"] svg.speed`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+lih(que('#speed')[0]).addEventListener('mouseup',e=>{		que(`[rowinfoid="77"] svg.speed`)[0]?.dispatchEvent(new MouseEvent(e.type))		},)
+setInterval(()=>{
+	que('#showseek')[0].textContent = que(`[rowinfoid="77"] .curtime`)[0]?.textContent ?? '----'
+	que('#showspeed')[0].textContent = (+que(`[rowinfoid="77"] input.speed`)[0]?.value)?.toFixed(3) ?? '----'
+},44,)// ===
+
 let svg = (queini,f,)=>{//copy gambar tongsampah
 	let del = que(queini)[0].cloneNode(true)
 	del.classList.remove('hilang')
@@ -584,7 +637,7 @@ addEventListener('load',()=>tambahinfo(
 `Selamat datang di Realtime 3d, silakan -->> DOUBLECLICK <<-- info ini (expand & collapse)
 
 --------------------------
-"inijudul"
+"Fortress vs tank sirewel armor kalengkaleng rengginang"
 
 Saat ini aku mau tunjukkan:
 - Perubahan bentuk objek secara realtime

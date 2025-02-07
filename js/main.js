@@ -633,9 +633,12 @@ async (rowinfo,rowpabaru,)=>{
 	let arr = new Float32Array(4)
 	// time0, time1, timejarak, isplaying
 	if(
+/*=======
 		rowinfo.data
 		&& (rowinfo.usage === rowpabaru.usage)
 		&& (rowinfo.data.size === arr.byteLength)
+--------*/
+		false //tetap setdata
 	){
 		write(rowinfo.data,arr,)
 	}else{

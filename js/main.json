@@ -142,7 +142,7 @@
 		{
 			"text": "\nexport let main = async()=>{ try{\n\tlih('teess, ini main js')\n\t\n\trequestAnimationFrame(loop)\n/*========\n\tlet cl = window.cl = await bikinclinfo(\n\t\t'https://hmbtdoeieiezztgpexpw.supabase.co',\n\t\t'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtYnRkb2VpZWllenp0Z3BleHB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE2Nzg0NjUsImV4cCI6MjA0NzI1NDQ2NX0.q1lwtj-oqhSXBPdvYRNpOxGQ4HJ-VX6g_jJws4eX_0A',\n\t)\n\n\tlet cl = window.cl = await bikinclinfo(\n\t\t'https://gwpezptjslssarivlqro.supabase.co',\n\t\t'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cGV6cHRqc2xzc2FyaXZscXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI0OTc4NzYsImV4cCI6MjA0ODA3Mzg3Nn0.MddHNM2aeBTNdys19AW544maLh-7ipzsQz8Yzl7h6AA',\n\t)\n--------*/\n\n\t\n}catch(err){\n\tlih(err)\n} }\n",
 			"visible": true,
-			"time": "1567425.9110226424",
+			"time": "1621089.8461228146",
 			"speed": "1",
 			"running": true,
 			"color": [
@@ -447,7 +447,7 @@
 			]
 		},
 		{
-			"text": "\nusfubuf\n.controller[1] =\nasync (rowinfo,rowpabaru,)=>{\n\tlet desc = structuredClone(rowpabaru.buffer)\n\tlet rowmap = clmap.get(rowinfo.clinfo)\n\t\n\tlet arr = new Float32Array(4)\n\t// time0, time1, timejarak, isplaying\n\tif(\n\t\trowinfo.data\n\t\t&& (rowinfo.usage === rowpabaru.usage)\n\t\t&& (rowinfo.data.size === arr.byteLength)\n\t){\n\t\twrite(rowinfo.data,arr,)\n\t}else{\n\t\tfor(let i = 0;i < desc.length;i++){\n\t\t\tdesc[i].src = rowmap.get(desc[i].src).data\n\t\t}\n\t\trowinfo.setdata(\n\t\t\tbikinUNISTObuf(arr,true,),\n\t\t\tdesc,\n\t\t)\n\t}\n\trowinfo.aucon.start_at(0,1,)\n}\n",
+			"text": "\nusfubuf\n.controller[1] =\nasync (rowinfo,rowpabaru,)=>{\n\tlet desc = structuredClone(rowpabaru.buffer)\n\tlet rowmap = clmap.get(rowinfo.clinfo)\n\t\n\tlet arr = new Float32Array(4)\n\t// time0, time1, timejarak, isplaying\n\tif(\n/*=======\n\t\trowinfo.data\n\t\t&& (rowinfo.usage === rowpabaru.usage)\n\t\t&& (rowinfo.data.size === arr.byteLength)\n--------*/\n\t\tfalse //tetap setdata\n\t){\n\t\twrite(rowinfo.data,arr,)\n\t}else{\n\t\tfor(let i = 0;i < desc.length;i++){\n\t\t\tdesc[i].src = rowmap.get(desc[i].src).data\n\t\t}\n\t\trowinfo.setdata(\n\t\t\tbikinUNISTObuf(arr,true,),\n\t\t\tdesc,\n\t\t)\n\t}\n\trowinfo.aucon.start_at(0,1,)\n}\n",
 			"visible": true,
 			"time": "0",
 			"speed": "1",
@@ -637,7 +637,7 @@
 		{
 			"text": "\nlet urutkanpass = false\nlet caritargetkosong = false\nlet passurut = []\nlet renderpassdict = async ()=>{\n\tnow[0] = Math.round(performance.now())\n\twrite(miscbuf,misc,)\n\t\n\t//nanti cek update\n\t//\n\tif(urutkanpass){\n\t\turutkanpass = false\n\t\tpassurut = []\n\t\tfor (const rowmap of clmap.values()) {\n\t\t\tfor (const rowinfo of rowmap.values()) {\n\t\t\t\t;(rowinfo.usage === 'pass')\n\t\t\t\t? passurut.push(rowinfo) : 0\n\t\t\t}\n\t\t}\n\t\tpassurut\n\t\t.sort((a,b,)=>a.data.order-b.data.order)\n\t}\n\t\n\tfor(let [clinfo,rowmap,] of clmap){\n\t\tfor(let [id,rowinfo,] of rowmap){\n\t\t\tif(rowinfo.fsfh && rowinfo.isrealtime){\n\t\t\t\trowfile(rowinfo)\n\t\t\t}\n\t\t}\n\t\t\n\t\t\n\t\t\n\t\t//siap_controller\n\t\tfor(let [id,rowinfo,] of rowmap){\n\t\t\t;clinfo.siap_controller\n\t\t\t&& (rowinfo.usage === 'controller')\n\t\t\t&& await rowinfo.bikindata(rowinfo)\n\t\t}\n\t\tclinfo.setsiap_controller(false)\n\t\t//siap_pipe\n\t\tfor(let [id,rowinfo,] of rowmap){\n\t\t\t;clinfo.siap_pipe\n\t\t\t&& (rowinfo.usage === 'pipe')\n\t\t\t&& await rowinfo.bikindata(rowinfo)\n\t\t}\n\t\tclinfo.setsiap_pipe(false)\n\t\t//siap_bind\n\t\tfor(let [id,rowinfo,] of rowmap){\n\t\t\t;clinfo.siap_bind\n\t\t\t&& (rowinfo.usage === 'bind')\n\t\t\t&& await rowinfo.bikindata(rowinfo)\n\t\t}\n\t\tclinfo.setsiap_bind(false)\n\t\t//siap_pass\n\t\tfor(let [id,rowinfo,] of rowmap){\n\t\t\t;clinfo.siap_pass\n\t\t\t&& (rowinfo.usage === 'pass')\n\t\t\t&& await rowinfo.bikindata(rowinfo)\n\t\t}\n\t\tclinfo.setsiap_pass(false)\n\t}\n\t\n/*========\n\t//siap\n\tsiap_controller\t\t&& await siap('controller'\t)\n\tsiap_pipe\t\t&& await siap('pipe'\t)\n\tsiap_bind\t\t&& await siap('bind'\t)\n\tsiap_pass\t\t&& await siap('pass'\t)\n\t\n\tsiap_controller\t=\n\tsiap_pipe\t=\n\tsiap_bind\t=\n\tsiap_pass\t= false\n--------*/\n\t\n\t//render\n\tlet err = await render(passurut,passgetdata,)\n\terr && tambahinfo(\n`Error: render error\n\n${err}\n`\t,'#ff9977ff','rendererror',)\n}\n",
 			"visible": true,
-			"time": "443040.68939797586",
+			"time": "460445.2088900977",
 			"speed": "0.3243243243243231",
 			"running": true,
 			"color": [
@@ -762,7 +762,7 @@
 		{
 			"text": "\n/*\n-=-===-=-=-==--=-=-=--==--==--=\n\n\n\n\n\n\n\n\n\n\n\n-=-===-=-=-==--=-=-=--==--==--=\n*/\n",
 			"visible": true,
-			"time": "1567474.7892226938",
+			"time": "1621138.724322866",
 			"speed": "1",
 			"running": true,
 			"color": [
