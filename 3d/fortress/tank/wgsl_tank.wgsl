@@ -181,7 +181,7 @@ fn m2lain(
 )->mat4x4f{
 	let ani = sound0[0]*.001;
 	let fiid = f32(iid);
-	let x = fiid*1.2;
+	let x = (fiid%7)*1.2;
 	let z = fiid*-22.-222.+ani*3.;
 	return mat4x4f(
 		 1.0, 0.0, 0.0, 0.0,
