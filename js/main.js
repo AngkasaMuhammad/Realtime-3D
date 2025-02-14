@@ -290,7 +290,13 @@ let aucon = class {
 			
 			let whenglo	= newstartTime + (when - seek)/newspeed	;	;whenglo = Math.max(0,whenglo,)
 			let offsetlok	= Math.max(offset,offset + seek - when,)	;	;offsetlok = Math.max(0,offsetlok,)
+			
 			if(duration === null){
+//cobaan, 
+if(loop){
+	offsetlok %= src.duration
+}
+//
 				source.start(whenglo,offsetlok,)
 			}else{
 				let durglo = Math.min(duration,duration + when - seek,) ;durglo = Math.max(0,durglo,)
